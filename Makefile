@@ -1,23 +1,17 @@
-CC=gcc
-MPICC=mpicc
-CFLAGS=-O2
-OMPFLAGS=-fopenmp
+CC = gcc
+MPICC = mpicc
+CFLAGS = -O3 -Wall
 
-all: serial_sort omp_sort mpi_sort diagnosis
+all: bitonic bitonic_omp bitonic_mpi
 
-serial_sort: serial_sort.c
-	$(CC) $(CFLAGS) -o serial_sort serial_sort.c
+bitonic: bitonic.c
+	$(CC) $(CFLAGS) -o $@ $^
 
-omp_sort: omp_sort.c
-	$(CC) $(CFLAGS) $(OMPFLAGS) -o omp_sort omp_sort.c
+bitonic_omp: bitonic_omp.c
+	$(CC) $(CFLAGS) -fopenmp -o $@ $^
 
-mpi_sort: mpi_sort.c
-	$(MPICC) $(CFLAGS) -o mpi_sort mpi_sort.c
-
-diagnosis: diagnosis.c serial_sort.c omp_sort.c
-	$(CC) $(CFLAGS) $(OMPFLAGS) -o diagnosis diagnosis.c serial_sort.c omp_sort.c
+bitonic_mpi: bitonic_mpi.c
+	$(MPICC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f serial_sort omp_sort mpi_sort diagnosis *.o
-
-.PHONY: all clean
+	rm -f bitonic bitonic_omp bitonic_mpi
