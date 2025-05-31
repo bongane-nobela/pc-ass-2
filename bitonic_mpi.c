@@ -8,22 +8,21 @@
 #define DESCENDING 0
 #define MASTER 0
 
-// Helper: check if n is a power of two
+
 int is_power_of_two(int n) {
     return n > 0 && (n & (n - 1)) == 0;
 }
 
-// Comparison function for qsort (ascending)
+
 int ascendingOrder(const void *a, const void *b) {
     return (*(int*)a) - (*(int*)b);
 }
 
-// Merge two sorted arrays, keep either low or high half
 void merge(int **a, int *b, size_t N, int dir) {
     int *result = malloc(N * sizeof(int));
     int i = 0, j = 0, k = 0;
     if (dir == ASCENDING) {
-        // Keep smallest N elements
+       
         while (i < N && j < N && k < N) {
             if ((*a)[i] < b[j]) result[k++] = (*a)[i++];
             else result[k++] = b[j++];
@@ -31,7 +30,7 @@ void merge(int **a, int *b, size_t N, int dir) {
         while (k < N && i < N) result[k++] = (*a)[i++];
         while (k < N && j < N) result[k++] = b[j++];
     } else {
-        // Keep largest N elements
+       
         i = N - 1; j = N - 1; k = N - 1;
         while (i >= 0 && j >= 0 && k >= 0) {
             if ((*a)[i] > b[j]) result[k--] = (*a)[i--];
@@ -44,7 +43,7 @@ void merge(int **a, int *b, size_t N, int dir) {
     *a = result;
 }
 
-// Exchange and merge with partner
+
 void compare(int **local_array, size_t N, int partner, int dir) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -58,7 +57,7 @@ void compare(int **local_array, size_t N, int partner, int dir) {
     free(recv_buf);
 }
 
-// Check if array is sorted in ascending order
+
 bool verify_sorted(const int* arr, int n) {
     for (int i = 1; i < n; i++) {
         if (arr[i - 1] > arr[i]) return false;
@@ -107,14 +106,14 @@ int main(int argc, char **argv) {
     for (int i = 0; i < N; i++)
         array[i] = rand() % (N * size);
 
-    // Local sort
+   
     qsort(array, N, sizeof(int), ascendingOrder);
     MPI_Barrier(MPI_COMM_WORLD);
 
     if (rank == MASTER)
         startTime = MPI_Wtime();
 
-    // Parallel bitonic sort
+
     for (int i = 0; i < p; i++) {
         for (int j = i; j >= 0; j--) {
             int partner = rank ^ (1 << j);
@@ -130,7 +129,7 @@ int main(int argc, char **argv) {
     if (rank == MASTER)
         endTime = MPI_Wtime();
 
-    // Gather all sorted data to root for verification
+
     int *all_data = NULL;
     if (rank == MASTER)
         all_data = malloc(N * size * sizeof(int));

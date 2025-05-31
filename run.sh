@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Test with 5 different input sizes (all powers of two)
-TEST_SIZES=(1024 16384 131072 1048576 8388608)
-OMP_THREADS=4
-MPI_PROCS=4
+TEST_SIZES=(16 32 64 256 512 1024 16384 131072 1048576 8388608)
+OMP_THREADS=16
+MPI_PROCS=8
 
 for N in "${TEST_SIZES[@]}"; do
     echo "=============================================="
