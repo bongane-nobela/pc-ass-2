@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
 
     double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
 
-    printf("[Serial] Elements: %d | Time: %.6f | PEs: 1 | Speedup: 1.00 | Efficiency: 100.00%% | Correct: %s\n",
+    printf("[Serial] Elements: %d | Time: %.6f | PEs: 1 | Correct: %s\n",
            n, elapsed, is_sorted(arr, n) ? "PASS" : "FAIL");
 
     free(arr);
